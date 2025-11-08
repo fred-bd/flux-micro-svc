@@ -1,0 +1,9 @@
+@Library("jenkins-shared@main")_
+
+configureFlux { 
+  credentialId="vaultAdminToken"
+  agentName="kube-agent"
+  helmSecretPath="helm-repo-credentials/chartmuseum"
+  helmUserKey="user_name"
+  helmPasswordKey="user_password"
+}
