@@ -4,5 +4,6 @@ public enum VaultMethods
 {
   None = 0,
   Kubernetes,
-  Approle
+  Approle,
+  NewType
 }
