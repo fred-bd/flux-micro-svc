@@ -2,7 +2,10 @@ using Microsoft.OpenApi.Models;
 
 using Kubernetes.Services;
 using Kubernetes.Services.Interfaces;
-using Kubernetes.Configurations;
+using Kubernetes.Repository.Interfaces;
+using Kubernetes.Repository;
+using k8s;
+using Kubernetes.Repository.Wrappers;
 
 namespace Kubernetes.Extensions;
 
@@ -11,21 +14,23 @@ public static class ServicesExtensions
   public static IServiceCollection RegisterServices(this IServiceCollection services)
   {
     services.AddControllers();
-
-    services.AddScoped<HelloService>();
-    services.AddScoped<IKubernetesService, KubernetesService>();
-
     services.ConfigureSwagger();
+    return ConfigureFluxServices(services);
+  }
+
+  private static IServiceCollection ConfigureFluxServices(this IServiceCollection services)
+  {
+    services.AddScoped<IFluxRepository, FluxRepository>();
+    services.AddScoped<IFluxService, FluxService>();
+    services.AddScoped<IClientWrapper, GenericClientWrapper>();
 
     var configurations = LoadConfigurations();
-    var kubeconfig = k8s.KubernetesClientConfiguration.BuildConfigFromConfigFile(configurations.GetKubeConfigFile());
+    var kubeconfig = KubernetesClientConfiguration.BuildConfigFromConfigFile(configurations.GetKubeConfigFile());
+    var kubeclient = new k8s.Kubernetes(kubeconfig);
 
-    var vaultConfig = LoadConfigurations().GetVaultConfiguration() ?? new VaultConfigParams();
+    services.AddSingleton<IKubernetes>(kubeclient);
 
-    services.AddSingleton(kubeconfig);
-    services.AddSingleton(vaultConfig);
-
-    return services;
+    return services;    
   }
 
   private static IServiceCollection ConfigureSwagger(this IServiceCollection services)

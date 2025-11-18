@@ -22,4 +22,8 @@ cat secret.json | dotnet user-secrets set --project kubernetes
 # Adding swagger
 dotnet add kubernetes package Swashbuckle.AspNetCore
 dotnet add kubernetes package KubernetesCRDModelGen.Models.fluxcd.io
+
+# Relating projects and unittest
+dotnet add unittests reference kubernetes
+
 ```
