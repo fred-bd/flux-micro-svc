@@ -1,4 +1,7 @@
 @Library("jenkins-shared@main")_
 
 dotnetRunTests {
+  credentialId="sonar-access-token"
+  agentName="dotnet-sonar"
+  sonarProjectId="Flux-svc-backend"
 }
