@@ -2,6 +2,6 @@
 
 dotnetRunTests {
   credentialId="sonar-access-token"
-  agentName="dotnet-sonar"
+  agentName="dotnet-sonar-agent"
   sonarProjectId="Flux-svc-backend"
 }
