@@ -1,9 +1,7 @@
 @Library("jenkins-shared@main")_
 
-configureFlux { 
-  credentialId="vaultAdminToken"
-  agentName="kube-agent"
-  helmSecretPath="helm-repo-credentials/chartmuseum"
-  helmUserKey="user_name"
-  helmPasswordKey="user_password"
+dotnetRunTests {
+  credentialId="sonar-access-token"
+  agentName="dotnet-sonar-agent"
+  sonarProjectId="Flux-svc-backend"
 }
