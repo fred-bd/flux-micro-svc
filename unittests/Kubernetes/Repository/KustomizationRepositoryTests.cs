@@ -76,4 +76,31 @@ public class FluxRepositoryTests
     Assert.NotNull(testing);
     Assert.Null(testing.Items);
   }
+
+  [Fact]
+  public async Task Should_return_kustomization_get_if_exists_in_namespace()
+  {
+    // Arrange
+    var ksName = "test1";
+    var ksNs = "test";
+
+    var result = new V1Kustomization
+    {
+      Metadata = new V1ObjectMeta { Name = ksName }
+    }; 
+
+    _clientWrapperMoc.Setup(
+      x => x.GetAsync(It.Is<string>(k => k == "test"), It.Is<string>(k => k == "test1"))
+    ).ReturnsAsync(result);
+
+    // Act
+    var testing1 = await _fluxRepository.GetAsync(ksNs, ksName);
+    var testing2 = await _fluxRepository.GetAsync(ksNs, "test2");
+
+    // Assert
+    Assert.NotNull(testing1);
+    Assert.Equal(ksName, testing1.Metadata!.Name);
+
+    Assert.Null(testing2);
+  }
 }
